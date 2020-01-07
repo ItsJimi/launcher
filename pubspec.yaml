@@ -71,3 +71,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: Manjari
+      fonts:
+        - asset: assets/fonts/Manjari-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Manjari-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Manjari-Bold.ttf
+          weight: 700

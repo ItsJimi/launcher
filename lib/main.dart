@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
+        fontFamily: 'Manjari',
       ),
       home: MyHomePage(),
     );
@@ -27,86 +28,115 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
   }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  Future<List<Application>> getApps(String text) async {
+    print(text);
+    var apps = await DeviceApps.getInstalledApplications(onlyAppsWithLaunchIntent: true, includeAppIcons: true);
+
+    return apps;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: DeviceApps.getInstalledApplications(onlyAppsWithLaunchIntent: true, includeAppIcons: true),
-        builder: (context, projectSnap) {
-          if (projectSnap.data == null) {
-            return Container();
-          }
+      backgroundColor: Colors.black,
+      body: Container(
+        padding: EdgeInsets.only(top: 10),
+        child: Column(
+          children: <Widget>[
+            Flexible(
+              flex: 1,
+              child: FutureBuilder(
+                future: getApps(searchController.text),
+                builder: (context, projectSnap) {
+                  if (projectSnap.data == null) {
+                    return Container();
+                  }
 
-          return GridView.builder(
-            padding: EdgeInsets.all(20.0),
-            shrinkWrap: true,
-            itemCount: projectSnap.data.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              childAspectRatio: 1,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              var app = projectSnap.data[index];
-              return GestureDetector(
-                onTap: () {
-                  DeviceApps.openApp(app.packageName);
+                  return GridView.builder(
+                    padding: EdgeInsets.all(20.0),
+                    shrinkWrap: true,
+                    itemCount: projectSnap.data.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      var app = projectSnap.data[index];
+                      return GestureDetector(
+                        onTap: () {
+                          DeviceApps.openApp(app.packageName);
+                        },
+                        child: Container(
+                          child: Column(
+                            children: <Widget>[
+                              Flexible(
+                                child: Image.memory(app.icon)
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 5),
+                                child: Text(
+                                  app.appName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12
+                                  ),
+                                )
+                              )
+                            ]
+                          )
+                        )
+                      );
+                    },
+                  );
                 },
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      Flexible(
-                        child: Image.memory(app.icon)
+              )
+            ),
+            Container(
+              color: Colors.blue,
+              padding: EdgeInsets.all(10),
+              child: Material(
+                color: Colors.white10,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 1),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(
+                        color: Colors.white70
                       ),
-                      Text(
-                        app.appName,
-                        overflow: TextOverflow.ellipsis
-                      )
-                    ]
-                  )
-                )
-              );
-            },
-          );
-        },
-      ) // This trailing comma makes auto-formatting nicer for build methods.
+                      hintText: 'Search...',
+                      border: InputBorder.none
+                    ),
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  ),
+                ),
+                elevation: 0,
+                shadowColor: Color.fromRGBO(0, 0, 0, 0.4),
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+              ),
+            )
+          ],
+        )
+      )
     );
   }
 }
