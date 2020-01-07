@@ -2,7 +2,7 @@
 Minimalist applications launcher for android create with flutter.
 
 ## Goal
-I'm trying to create a minimalist applications launcher for android that suits me the most. The launcher must be open source, lightweight, customizable, without advertising and respectful of privacy.
+I'm trying to create a minimalist applications launcher for android that suits me the most. The launcher must be open source, lightweight, customizable, respectful of privacy and without advertising.
 
 ## Screenshots
 Soon
