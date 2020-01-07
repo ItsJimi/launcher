@@ -35,17 +35,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final searchController = TextEditingController();
+  String searchText = "";
 
   @override
   void initState() {
     super.initState();
   }
 
-  Future<List<Application>> getApps(String text) async {
-    print(text);
+  Future<List<Application>> getApps() async {
     var apps = await DeviceApps.getInstalledApplications(onlyAppsWithLaunchIntent: true, includeAppIcons: true);
-
+    apps = apps.where((app) => app.appName.toLowerCase().contains(searchText.toLowerCase())).toList();
+  
     return apps;
   }
 
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Flexible(
               flex: 1,
               child: FutureBuilder(
-                future: getApps(searchController.text),
+                future: getApps(),
                 builder: (context, projectSnap) {
                   if (projectSnap.data == null) {
                     return Container();
@@ -116,7 +116,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, bottom: 1),
                   child: TextField(
-                    controller: searchController,
+                    onSubmitted: (value) {
+                      setState(() {
+                        searchText = value;
+                      });
+                    },
                     decoration: InputDecoration(
                       hintStyle: TextStyle(
                         color: Colors.white70
