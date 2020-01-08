@@ -36,6 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String searchText = "";
+  List<Application> apps = [];
 
   @override
   void initState() {
@@ -43,10 +44,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<List<Application>> getApps() async {
-    var apps = await DeviceApps.getInstalledApplications(onlyAppsWithLaunchIntent: true, includeAppIcons: true);
-    apps = apps.where((app) => app.appName.toLowerCase().contains(searchText.toLowerCase())).toList();
+    if (apps.length == 0) {
+      apps = await DeviceApps.getInstalledApplications(onlyAppsWithLaunchIntent: true, includeAppIcons: true);
+    }
+
+    var filteredApps = apps.where((app) => app.appName.toLowerCase().contains(searchText.toLowerCase())).toList();
   
-    return apps;
+    return filteredApps;
   }
 
   @override
@@ -116,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, bottom: 1),
                   child: TextField(
-                    onSubmitted: (value) {
+                    onChanged: (value) {
                       setState(() {
                         searchText = value;
                       });
