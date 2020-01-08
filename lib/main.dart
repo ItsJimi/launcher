@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:launcher/applist.dart';
+import 'package:launcher/hackernewscard.dart';
 import 'package:launcher/iotcard.dart';
 
 void main() => runApp(MyApp());
@@ -56,7 +57,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             Container(
               child: ListView(
                 children: <Widget>[
-                  IOTCard()
+                  IOTCard(),
+                  HackerNewsCard()
                 ],
               ),
             ),
