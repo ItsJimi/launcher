@@ -36,13 +36,15 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  TabController _tabController;
   String searchText = "";
   List<Application> apps = [];
 
   @override
   void initState() {
     super.initState();
+    _tabController = new TabController(vsync: this, length: 2, initialIndex: 1);
   }
 
   Future<List<Application>> getApps() async {
@@ -62,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: DefaultTabController(
         length: 2,
         child: TabBarView(
+          controller: _tabController,
           children: [
             Container(
               child: ListView(
