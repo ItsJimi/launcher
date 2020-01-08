@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class IOTButton extends StatelessWidget {
   String icon;
@@ -14,7 +15,7 @@ class IOTButton extends StatelessWidget {
           borderRadius: new BorderRadius.all(Radius.circular(100))
         ),
         child: Icon(
-          Icons.lightbulb_outline,
+          MdiIcons.fromString(icon),
           size: 35,
           color: Colors.white,
         ),

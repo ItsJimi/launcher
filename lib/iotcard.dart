@@ -12,9 +12,11 @@ class IOTCard extends StatelessWidget {
         crossAxisCount: 5,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        children: List.generate(5, (index) {
-          return IOTButton("lightbulb_outline");
-        }),
+        children: <Widget>[
+          IOTButton("lightbulb"),
+          IOTButton("window-shutter-open"),
+          IOTButton("window-shutter"),
+        ]
       )
     );
   }
