@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:launcher/addfeedcard.dart';
 import 'package:launcher/applist.dart';
-import 'package:launcher/hackernewscard.dart';
-import 'package:launcher/iotcard.dart';
+import 'package:launcher/feedcard.dart';
 import 'package:launcher/rsscard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -40,11 +42,61 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   TabController _tabController;
+  SharedPreferences prefs;
+  List<Widget> cards = [];
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(vsync: this, length: 2, initialIndex: 1);
+    SharedPreferences.getInstance().then((_prefs) {
+      setState(() {
+        prefs = _prefs;
+        cards = getCards();
+      });
+    });
+  }
+
+  List<Widget> getCards() {
+    String cards = prefs.getString("feedCards");
+    if (cards == null) return [];
+    dynamic decodedCards = json.decode(cards);
+
+    List<Widget> widgets = decodedCards.map<Widget>((card) {
+      switch (card['title']) {
+        case "rss":
+          return RSSCard(url: card['options']['url']);
+          break;
+        default:
+          return FeedCard(card['title'], Container());
+      }
+    }).toList();
+    widgets.insert(0, Container(
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 30,
+            height: 30,
+            child: FlatButton(
+              highlightColor: Colors.white12,
+              shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+              padding: EdgeInsets.all(0),
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddFeedCardPage()),
+                );
+              },
+            )
+          )
+        ],
+      )
+    ));
+    return widgets;
   }
 
   @override
@@ -58,35 +110,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           children: [
             Container(
               child: ListView(
-                children: <Widget>[
-                  Container(
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          width: 30,
-                          height: 30,
-                          child: FlatButton(
-                            highlightColor: Colors.white12,
-                            shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
-                            padding: EdgeInsets.all(0),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => AddFeedCardPage()),
-                              );
-                            },
-                          )
-                        )
-                      ],
-                    )
-                  ),
-                  IOTCard(),
-                  RSSCard()
-                ],
+                children: cards,
               ),
             ),
             AppList()
@@ -96,23 +120,3 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 }
-
-/*
-Feed cards:
-[
-  {
-    type: "rss",
-    title: "Hacker news",
-    options: {
-      url: "https://news.ycombinator.com/rss"
-    }
-  },
-  {
-    type: "rss",
-    title: "Commitstrip",
-    options: {
-      url: "http://www.commitstrip.com/en/feed"
-    }
-  }
-]
-*/
