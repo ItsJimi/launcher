@@ -63,9 +63,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     dynamic decodedCards = json.decode(cards);
 
     List<Widget> widgets = decodedCards.map<Widget>((card) {
-      switch (card['title']) {
+      switch (card['type']) {
         case "rss":
-          return RSSCard(url: card['options']['url']);
+          return RSSCard(card: card);
           break;
         default:
           return FeedCard(card['title'], Container());

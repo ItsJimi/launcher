@@ -4,9 +4,9 @@ import 'package:http/http.dart' as http;
 import 'package:webfeed/webfeed.dart';
 
 class RSSCard extends StatefulWidget {
-  String url;
+  dynamic card;
 
-  RSSCard({Key key, this.url}) : super(key: key);
+  RSSCard({Key key, this.card}) : super(key: key);
 
   @override
   _RSSCardState createState() => _RSSCardState();
@@ -19,7 +19,7 @@ class _RSSCardState extends State<RSSCard> {
   }
   
   Future<List<RssItem>> fetchTopStories() async {
-    var response = await http.get(widget.url);
+    var response = await http.get(widget.card['options']['url']);
 
     RssFeed feed;
     try {
@@ -33,7 +33,7 @@ class _RSSCardState extends State<RSSCard> {
   @override
   Widget build(BuildContext context) {
     return FeedCard(
-      "RSS",
+      widget.card['title'],
       FutureBuilder<List<RssItem>>(
         future: fetchTopStories(),
         builder: (BuildContext context, AsyncSnapshot<List<RssItem>> snapshot) {
