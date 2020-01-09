@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:launcher/addfeedcard.dart';
 import 'package:launcher/applist.dart';
 import 'package:launcher/hackernewscard.dart';
 import 'package:launcher/iotcard.dart';
+import 'package:launcher/rsscard.dart';
 
 void main() => runApp(MyApp());
 
@@ -57,8 +59,33 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             Container(
               child: ListView(
                 children: <Widget>[
+                  Container(
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: 30,
+                          height: 30,
+                          child: FlatButton(
+                            highlightColor: Colors.white12,
+                            shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+                            padding: EdgeInsets.all(0),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => AddFeedCardPage()),
+                              );
+                            },
+                          )
+                        )
+                      ],
+                    )
+                  ),
                   IOTCard(),
-                  HackerNewsCard()
+                  RSSCard()
                 ],
               ),
             ),
@@ -69,3 +96,23 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 }
+
+/*
+Feed cards:
+[
+  {
+    type: "rss",
+    title: "Hacker news",
+    options: {
+      url: "https://news.ycombinator.com/rss"
+    }
+  },
+  {
+    type: "rss",
+    title: "Commitstrip",
+    options: {
+      url: "http://www.commitstrip.com/en/feed"
+    }
+  }
+]
+*/
