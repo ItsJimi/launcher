@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:launcher/feedcard.dart';
+import 'package:launcher/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddRSSCardPage extends StatefulWidget {
@@ -114,7 +115,10 @@ class _AddRSSCardPageState extends State<AddRSSCardPage> {
                 return;
               }
 
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyHomePage()),
+              );
             },
           )
         ],
