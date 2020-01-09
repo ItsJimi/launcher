@@ -14,7 +14,7 @@ class _AppListState extends State<AppList> {
 
   Future<List<Application>> getApps() async {
     if (apps.length == 0) {
-      apps = await DeviceApps.getInstalledApplications(onlyAppsWithLaunchIntent: true, includeAppIcons: true);
+      apps = await DeviceApps.getInstalledApplications(onlyAppsWithLaunchIntent: true, includeAppIcons: true, includeSystemApps: true);
     }
 
     var filteredApps = apps.where((app) => app.appName.toLowerCase().contains(searchText.toLowerCase())).toList();
