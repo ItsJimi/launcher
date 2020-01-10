@@ -71,19 +71,22 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           return FeedCard(card['title'], Container());
       }
     }).toList();
-    widgets.insert(0, Container(
+    widgets.add(Container(
+      margin: EdgeInsets.only(bottom: 10),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Container(
-            width: 30,
-            height: 30,
+            width: 50,
+            height: 50,
             child: FlatButton(
               highlightColor: Colors.white12,
-              shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(100)),
               padding: EdgeInsets.all(0),
               child: Icon(
                 Icons.add,
                 color: Colors.white,
+                size: 40,
               ),
               onPressed: () {
                 Navigator.push(
