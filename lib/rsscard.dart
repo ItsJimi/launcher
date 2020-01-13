@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:launcher/feedcard.dart';
 import 'package:http/http.dart' as http;
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:webfeed/webfeed.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RSSCard extends StatefulWidget {
   dynamic card;
@@ -45,12 +47,31 @@ class _RSSCardState extends State<RSSCard> {
             children: snapshot.data.map((item) => Container(
               margin: EdgeInsets.only(bottom: 10),
               alignment: Alignment.centerLeft,
-              child: Text(
-                item.title,
-                style: TextStyle(
-                  color: Colors.white
+              child: ListTile(
+                title: Text(
+                  item.title,
+                  style: TextStyle(
+                    color: Colors.white
+                  ),
                 ),
-              ),
+                subtitle: Text(
+                  item.pubDate,
+                  style: TextStyle(
+                    color: Colors.white54
+                  ),
+                ),
+                trailing: Icon(
+                  MdiIcons.arrowRight,
+                  color: Colors.white,
+                ),
+                onTap: () async {
+                  try {
+                    await launch(item.link);
+                  } catch (e) {
+                    print(e);
+                  }
+                }
+              )
             )).toList()
           );
         },
